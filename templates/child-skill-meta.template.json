@@ -1,0 +1,14 @@
+{
+  "skill_id": "{{skill_id}}",
+  "display_name": "{{display_name}}",
+  "source_id": "{{source_id}}",
+  "content_type": "{{content_type}}",
+  "topic_tags": ["{{topic_tag_1}}"],
+  "supported_modes": ["teach", "coach", "reflect"],
+  "execution_level": "{{execution_level}}",
+  "status": "draft",
+  "version": "v1",
+  "memory_enabled": true,
+  "exportable": true,
+  "entry_path": "skills/{{skill_id}}/SKILL.md"
+}

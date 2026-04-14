@@ -1,0 +1,119 @@
+---
+name: evo_skills
+description: |
+  Build, manage, and route a library of article-derived child skills with long-term memory and optional execution support.
+
+  Triggers when user mentions:
+  - "文章转 skill"
+  - "从书里提炼 skill"
+  - "统一管理多个 skill"
+---
+
+# evo_skills
+
+`evo_skills` is the exposed meta skill for this workspace. It is discoverable by the agent system directly and acts as the control layer for managed child skills created from books, articles, tutorials, and other learning materials.
+
+## What evo_skills does
+
+`evo_skills` owns five responsibilities:
+
+1. **Source distillation** — convert user-provided source material into normalized article packages under `articles/`.
+2. **Child-skill generation** — create standalone-friendly child skills under `skills/` using the shared templates in `templates/`.
+3. **Skill routing** — pick the most relevant child skill for a user request and decide which mode to use.
+4. **Memory orchestration** — keep long-term memory in `memory/` using a per-skill and per-user structure.
+5. **Governance and export** — maintain `skills/skill_summary.md`, `skills/registry.json`, and prepare portable exports under `exports/`.
+
+## Child-skill modes
+
+Every generated child skill should support one or more of these modes:
+
+- `teach`: explain key ideas, examples, mechanisms, and misconceptions
+- `coach`: analyze the user's scenario, suggest strategies, ask guiding questions, and adapt to constraints
+- `reflect`: summarize growth, persistent blind spots, and behavior changes from long-term memory
+- `execute`: perform concrete steps when the source material describes a repeatable, low-to-medium-risk workflow
+
+## Execution-mode rule
+
+`execute` is **optional**. It is enabled only when the child skill passes an execution-eligibility review.
+
+Enable `execute` only if the source material has:
+
+1. a repeatable step-by-step workflow
+2. actions the agent can realistically map to tools
+3. outputs that can be validated
+4. risk low enough for the balanced execution posture
+
+Execution levels:
+
+- `none`: no execution allowed
+- `plan_only`: provide steps but do not execute
+- `guided_execute`: execute safe steps while explaining what is happening
+- `safe_execute`: execute low-risk standard actions directly
+
+Balanced posture:
+
+- Safe reads, analysis, generation, indexing, and tests may run automatically when clearly within scope.
+- Any destructive, production-impacting, remote, credential-sensitive, or ambiguous action requires explicit user approval first.
+
+## Long-term memory policy
+
+Memory is organized by skill and then by user.
+
+Recommended layout:
+
+```text
+memory/<skill_id>/
+  shared/
+  users/<user_id>/
+    profile.md
+    progress.md
+    sessions/
+```
+
+Memory should store summarized, durable observations such as goals, recurring obstacles, preferred explanation style, effective interventions, and growth milestones.
+
+Do **not** commit raw secrets, access tokens, or verbatim private memory into repo files. Store only safe summaries, schemas, and stable pointers.
+
+## Registry and naming rules
+
+Use stable IDs:
+
+- `source_id`: source-material identifier, such as `article_clear-thinking_2026-04`
+- `skill_id`: child-skill identifier, such as `coach.clear-thinking.decision-review.v1`
+- `display_name`: human-readable title, such as `Clear Thinking 决策复盘教练`
+
+`skills/registry.json` is the machine-readable inventory.
+
+`skills/skill_summary.md` is the human-readable overview.
+
+## Child-skill standard
+
+Each generated child skill should be portable and contain at least:
+
+- `SKILL.md`
+- `README.md`
+- `meta.json`
+- `memory_schema.md`
+- optional `cases/` and `prompts/`
+
+Generated child skills should work outside `evo_skills` as much as possible. `evo_skills` improves routing, governance, and memory orchestration, but should not make child skills unusable elsewhere.
+
+## Quick usage
+
+Use `evo_skills` when the user wants to:
+
+- turn source material into reusable skills
+- manage many child skills consistently
+- route a user problem to the right child skill
+- maintain long-term growth memory per skill and per user
+- decide whether a tutorial-like child skill should expose execution mode
+
+## Internal directories
+
+- `articles/` stores normalized content packages derived from source materials
+- `skills/` stores managed child skills plus summary and registry files
+- `memory/` stores long-term memory for child skills and their users
+- `scripts/` stores automation helpers
+- `templates/` stores child-skill generation templates
+- `exports/` stores portable child-skill bundles
+- `archive/` stores retired or superseded child skills
