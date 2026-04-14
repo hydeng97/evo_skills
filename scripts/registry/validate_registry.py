@@ -24,6 +24,7 @@ ENTRY_REQUIRED_KEYS = {
     "display_name",
     "source_id",
     "content_type",
+    "tags",
     "supported_modes",
     "execution_level",
     "status",
@@ -76,6 +77,10 @@ def main() -> int:
         supported_modes = entry["supported_modes"]
         if not isinstance(supported_modes, list) or not supported_modes:
             return fail(f"skills[{index}].supported_modes must be a non-empty list")
+
+        tags = entry["tags"]
+        if not isinstance(tags, list) or not tags:
+            return fail(f"skills[{index}].tags must be a non-empty list")
 
         entry_path = ROOT / entry["entry_path"]
         if not str(entry["entry_path"]).endswith("SKILL.md"):

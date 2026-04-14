@@ -54,6 +54,7 @@ def load_spec(spec_path: Path) -> dict:
         "skill_design.skill_id": skill_design.get("skill_id"),
         "skill_design.skill_folder_name": skill_design.get("skill_folder_name"),
         "skill_design.display_name": skill_design.get("display_name"),
+        "skill_design.tags": skill_design.get("tags"),
         "skill_design.one_sentence_description": skill_design.get(
             "one_sentence_description"
         ),
@@ -198,9 +199,14 @@ description: |
 
 def render_skill_readme(spec: dict) -> str:
     design = spec["skill_design"]
+    tags = ", ".join(design.get("tags", [])) or "暂无"
     return f"""# {design["display_name"]}
 
 {design["one_sentence_description"]}
+
+## Tags
+
+{tags}
 
 ## Target User Value
 
@@ -254,6 +260,7 @@ def default_registry() -> dict:
             "guided_execute": "Execute safe steps while explaining actions and assumptions.",
             "safe_execute": "Execute low-risk standard actions directly.",
         },
+        "tagging_note": "Tags are dynamic and should follow docs/dynamic_tagging_rule.md rather than a fixed category tree.",
         "skills": [],
     }
 
@@ -275,6 +282,7 @@ def refresh_summary(registry: dict, summary_path: Path) -> None:
     else:
         lines.extend(["## Registered child skills", ""])
         for entry in skills:
+            tags = ", ".join(entry.get("tags", [])) or "unknown"
             lines.extend(
                 [
                     f"### {entry['display_name']}",
@@ -282,6 +290,7 @@ def refresh_summary(registry: dict, summary_path: Path) -> None:
                     f"- `skill_id`: `{entry['skill_id']}`",
                     f"- `source_id`: `{entry['source_id']}`",
                     f"- content type: `{entry['content_type']}`",
+                    f"- tags: `{tags}`",
                     f"- supported modes: `{', '.join(entry['supported_modes'])}`",
                     f"- execution level: `{entry['execution_level']}`",
                     f"- status: `{entry['status']}`",
@@ -324,6 +333,8 @@ def build(spec: dict, root: Path) -> list[Path]:
         "display_name": design["display_name"],
         "source_id": source_meta["source_id"],
         "content_type": design["content_type"],
+        "one_sentence_description": design["one_sentence_description"],
+        "tags": design["tags"],
         "supported_modes": modes["supported_modes"],
         "execution_level": modes["execution_level"],
         "status": "draft",
@@ -366,6 +377,8 @@ def build(spec: dict, root: Path) -> list[Path]:
         "display_name": design["display_name"],
         "source_id": source_meta["source_id"],
         "content_type": design["content_type"],
+        "one_sentence_description": design["one_sentence_description"],
+        "tags": design["tags"],
         "supported_modes": modes["supported_modes"],
         "execution_level": modes["execution_level"],
         "status": "draft",

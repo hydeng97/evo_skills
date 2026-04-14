@@ -17,11 +17,39 @@ description: |
 
 `evo_skills` owns five responsibilities:
 
-1. **Source distillation** — convert user-provided source material into normalized article packages under `articles/`.
+1. **Source distillation** — the current agent reads user-provided source material and distills it into a structured `skill_spec.json` plus normalized article packages under `articles/`.
 2. **Child-skill generation** — create standalone-friendly child skills under `skills/` using the shared templates in `templates/`.
 3. **Skill routing** — pick the most relevant child skill for a user request and decide which mode to use.
 4. **Memory orchestration** — keep long-term memory in `memory/` using a per-skill and per-user structure.
 5. **Governance and export** — maintain `skills/skill_summary.md`, `skills/registry.json`, and prepare portable exports under `exports/`.
+
+## Agent-only distillation rule
+
+`evo_skills` should not rely on any external LLM API for content distillation. The current agent session must do the actual reading, synthesis, mode evaluation, and child-skill design work.
+
+The normal sequence is:
+
+1. Read the user-supplied source material.
+2. Distill a `skill_spec.json` candidate in the current session.
+3. Present the key design fields for user review.
+4. Only after approval, invoke local build scripts to materialize files and registry updates.
+
+The detailed operating documents for this workflow are:
+
+- `docs/source_type_decision_rule.md`
+- `docs/agent_distillation_checklist.md`
+- `docs/review_gate_template.md`
+- `docs/agent_distillation_runtime_protocol.md`
+- `docs/post_build_trial_rule.md`
+
+The minimum review gate before build should cover:
+
+- `display_name`
+- `skill_id`
+- `content_type`
+- `supported_modes`
+- `execution_level`
+- `core_thesis`
 
 ## Child-skill modes
 
@@ -107,6 +135,21 @@ Use `evo_skills` when the user wants to:
 - route a user problem to the right child skill
 - maintain long-term growth memory per skill and per user
 - decide whether a tutorial-like child skill should expose execution mode
+- perform the entire distill -> review -> build workflow inside the current agent session
+
+## Runtime use after build
+
+After child skills exist, `evo_skills` should also manage:
+
+1. **Routing** — choose the most relevant child skill from registry metadata and user intent.
+2. **Mode selection** — decide whether the selected skill should operate in `teach`, `coach`, `reflect`, or `execute` mode.
+3. **Memory loading** — read the relevant user and skill memory before generating a response.
+4. **Memory write-back** — update durable summaries after useful interactions.
+
+Supporting documents for this runtime layer:
+
+- `docs/runtime_routing_rule.md`
+- `docs/memory_runtime_rule.md`
 
 ## Internal directories
 

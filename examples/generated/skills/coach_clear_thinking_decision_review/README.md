@@ -2,6 +2,10 @@
 
 帮助用户理解并应用清晰思考进行决策复盘。
 
+## Tags
+
+psychology, psychology.decision-making, coaching
+
 ## Target User Value
 
 - 理解思想

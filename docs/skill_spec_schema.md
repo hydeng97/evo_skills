@@ -1,6 +1,6 @@
 # 一、`skill_spec.json` 概述
 
-`skill_spec.json` 是 `evo_skills` 中用于连接“LLM 内容提炼”与“child skill 工程落地”的标准中间格式。
+`skill_spec.json` 是 `evo_skills` 中用于连接“当前 agent 的内容提炼”与“child skill 工程落地”的标准中间格式。
 
 它的职责不是直接替代最终的 `SKILL.md`、`meta.json` 或 `memory_schema.md`，而是先把一次内容提炼的结果稳定地表达出来，让后续脚本和流程能够可靠消费。
 
@@ -17,9 +17,9 @@
 
 `skill_spec.json` 的设计遵循以下原则：
 
-1. **LLM 负责理解与提炼**。思想精髓、案例、适用边界、mode 判定应由 LLM 产出。
+1. **当前 agent 负责理解与提炼**。思想精髓、案例、适用边界、mode 判定应由当前 agent 会话产出。
 2. **脚本负责机械落地**。目录创建、文件写入、registry 更新与 summary 刷新由脚本承担。
-3. **先有 spec，再有文件**。不建议让 LLM 直接一步到位生成所有最终文件，而应先产出结构化 spec。
+3. **先有 spec，再有文件**。不建议让 agent 直接一步到位生成所有最终文件，而应先产出结构化 spec。
 4. **可迁移**。schema 不能过度依赖某个单一工作区结构，字段设计应支持迁移与导出。
 5. **可演进**。通过 `spec_version` 支持未来扩展。
 
@@ -187,6 +187,11 @@
   "skill_folder_name": "coach_clear_thinking_decision_review",
   "display_name": "Clear Thinking 决策复盘教练",
   "content_type": "coaching",
+  "tags": [
+    "psychology",
+    "psychology.decision-making",
+    "coaching"
+  ],
   "one_sentence_description": "基于清晰思考方法帮助用户做决策分析、复盘与偏差修正。",
   "target_user_value": [
     "帮助用户理解文章精髓",
@@ -212,6 +217,7 @@
 - `skill_folder_name`：文件系统目录名，建议使用安全、扁平命名。
 - `display_name`：人类可读名，必填。
 - `content_type`：建议值为 `insight`、`coaching`、`tutorial`、`technical`。
+- `tags`：动态标签列表，用于 routing 与渐进式披露。标签不应来自预设固定分类树，而应根据 `docs/dynamic_tagging_rule.md` 动态创建、复用、合并或拆分。
 - `one_sentence_description`：一句话定位，必填。
 - `trigger_phrases`：用于帮助系统理解触发场景，建议至少两个。
 - `tone_style`：对输出风格的软性建议。
@@ -369,6 +375,7 @@
 - `skill_design.skill_id`
 - `skill_design.display_name`
 - `skill_design.content_type`
+- `skill_design.tags`
 - `skill_design.one_sentence_description`
 - `mode_evaluation.supported_modes`
 - `mode_evaluation.execution_level`
@@ -454,6 +461,11 @@
     "skill_folder_name": "coach_clear_thinking_decision_review",
     "display_name": "Clear Thinking 决策复盘教练",
     "content_type": "coaching",
+    "tags": [
+      "psychology",
+      "psychology.decision-making",
+      "coaching"
+    ],
     "one_sentence_description": "帮助用户理解并应用清晰思考进行决策复盘。",
     "target_user_value": [
       "理解思想",
@@ -515,8 +527,8 @@
 
 在 `evo_skills` 中，推荐遵循以下工作流：
 
-1. 使用 LLM 根据原始材料生成 `skill_spec.json`。
-2. 使用 review 步骤检查提炼质量、mode 判定和 memory 设计是否合理。
-3. 使用脚本根据 `skill_spec.json` 生成 child skill 文件、memory 目录和 registry 更新。
+1. 由当前 agent 根据原始材料生成 `skill_spec.json`。
+2. 在 build 前由用户审查关键 spec 字段，尤其是 `display_name`、`skill_id`、`content_type`、`supported_modes`、`execution_level` 和 `core_thesis`。
+3. 使用脚本根据批准后的 `skill_spec.json` 生成 child skill 文件、memory 目录和 registry 更新。
 
-该流程的核心原则是：**先生成结构化 spec，再生成最终文件。**
+该流程的核心原则是：**当前 agent 负责提炼，脚本负责落地；先生成结构化 spec，再生成最终文件。**

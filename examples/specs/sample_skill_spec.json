@@ -62,6 +62,11 @@
     "skill_folder_name": "coach_clear_thinking_decision_review",
     "display_name": "Clear Thinking 决策复盘教练",
     "content_type": "coaching",
+    "tags": [
+      "psychology",
+      "psychology.decision-making",
+      "coaching"
+    ],
     "one_sentence_description": "帮助用户理解并应用清晰思考进行决策复盘。",
     "target_user_value": [
       "理解思想",

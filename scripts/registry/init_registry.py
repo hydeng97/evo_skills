@@ -25,6 +25,7 @@ DEFAULT_REGISTRY = {
         "guided_execute": "Execute safe steps while explaining actions and assumptions.",
         "safe_execute": "Execute low-risk standard actions directly.",
     },
+    "tagging_note": "Tags are dynamic and should follow docs/dynamic_tagging_rule.md rather than a fixed category tree.",
     "skills": [],
 }
 

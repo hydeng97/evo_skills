@@ -13,6 +13,7 @@ This file is generated from `skills/registry.json`.
 - `skill_id`: `coach.clear-thinking.decision-review.v1`
 - `source_id`: `article_clear-thinking_sample`
 - content type: `coaching`
+- tags: `psychology, psychology.decision-making, coaching`
 - supported modes: `teach, coach, reflect`
 - execution level: `none`
 - status: `draft`

@@ -58,6 +58,10 @@
     "skill_folder_name": "{{skill_folder_name}}",
     "display_name": "{{display_name}}",
     "content_type": "{{content_type}}",
+    "tags": [
+      "{{tag_1}}",
+      "{{tag_2}}"
+    ],
     "one_sentence_description": "{{one_sentence_description}}",
     "target_user_value": [
       "{{target_user_value_1}}"

@@ -15,6 +15,7 @@ This directory contains registry-maintenance helpers for `evo_skills`.
 - `init_registry.py`: recreate `skills/registry.json` from the default schema
 - `validate_registry.py`: minimal registry validator for the initial scaffold
 - `refresh_skill_summary.py`: regenerate the human-readable summary from `registry.json`
+- `generate_skill_library_overview.py`: generate a user-facing overview of the current skill library
 
 ## Expected registry entry shape
 
@@ -24,6 +25,7 @@ Each child skill entry in `skills/registry.json` should eventually include:
 - `display_name`
 - `source_id`
 - `content_type`
+- `tags`
 - `supported_modes`
 - `execution_level`
 - `status`
@@ -31,6 +33,8 @@ Each child skill entry in `skills/registry.json` should eventually include:
 - `memory_enabled`
 - `exportable`
 - `entry_path`
+
+Tag values are dynamic. They should follow `docs/dynamic_tagging_rule.md` and are expected to evolve by agent judgment rather than from a fixed predefined taxonomy.
 
 ## Usage
 
@@ -40,6 +44,13 @@ Run from the `evo_skills` root or any directory:
 python3 ".opencode/skills/evo_skills/scripts/registry/init_registry.py"
 python3 ".opencode/skills/evo_skills/scripts/registry/validate_registry.py"
 python3 ".opencode/skills/evo_skills/scripts/registry/refresh_skill_summary.py"
+python3 ".opencode/skills/evo_skills/scripts/registry/generate_skill_library_overview.py"
+```
+
+To generate an overview for a different generated root (for example a sample output tree), pass `--root`:
+
+```bash
+python3 ".opencode/skills/evo_skills/scripts/registry/generate_skill_library_overview.py" --root "examples/generated"
 ```
 
 Expected success output:

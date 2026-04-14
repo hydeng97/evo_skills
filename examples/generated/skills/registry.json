@@ -20,6 +20,12 @@
       "display_name": "Clear Thinking 决策复盘教练",
       "source_id": "article_clear-thinking_sample",
       "content_type": "coaching",
+      "one_sentence_description": "帮助用户理解并应用清晰思考进行决策复盘。",
+      "tags": [
+        "psychology",
+        "psychology.decision-making",
+        "coaching"
+      ],
       "supported_modes": [
         "teach",
         "coach",
