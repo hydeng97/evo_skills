@@ -88,6 +88,17 @@ memory 可用于：
 
 这让系统可以从少量 skill 平滑扩展到更大的 skill 库，而不会快速失控。
 
+### 6. Runtime Orchestration
+
+系统正在形成统一的 runtime orchestration 层，用于把：
+
+- routing
+- mode 选择
+- memory 读取
+- session 写回
+
+串成统一运行入口，而不是依赖手工拼接多个脚本与规则。
+
 ## Child Skill Modes
 
 每个 child skill 可以支持一个或多个运行模式：
