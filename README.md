@@ -20,3 +20,19 @@ This skill is intentionally designed so generated child skills can be exported a
 - `templates/`: standard generation templates for child skills
 - `exports/`: standalone child-skill bundles ready for migration
 - `archive/`: retired or superseded skill versions
+
+## Current build workflow
+
+The intended workflow is:
+
+1. Use an LLM to generate a `skill_spec.json` that follows `docs/skill_spec_schema.md`.
+2. Use `scripts/build/build_child_skill.py` to convert that spec into article artifacts, a child skill package, memory scaffolding, and registry updates.
+3. Use the registry tools to validate and refresh summary views as needed.
+
+Example build command:
+
+```bash
+source ~/.zshrc >/dev/null 2>&1
+conda activate agent
+python "scripts/build/build_child_skill.py" --spec "examples/specs/sample_skill_spec.json" --root "examples/generated"
+```

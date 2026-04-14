@@ -1,0 +1,155 @@
+{
+  "spec_version": "1.0",
+  "source_meta": {
+    "source_id": "article_clear-thinking_sample",
+    "source_type": "article",
+    "title": "Clear Thinking Sample",
+    "author": "Example Author",
+    "language": "zh",
+    "source_path": "examples/specs/sample_skill_spec.json",
+    "topic_tags": [
+      "thinking",
+      "decision-making"
+    ],
+    "rights_note": "Sample fixture for local builder verification"
+  },
+  "distillation": {
+    "summary": "帮助用户减少判断噪声，提升决策清晰度。",
+    "core_thesis": "在行动前先澄清问题和偏差来源，可以提高长期决策质量。",
+    "key_concepts": [
+      {
+        "name": "清晰思考",
+        "definition": "在行动前识别判断噪声和偏差来源。",
+        "importance": "这是这份内容的核心方法。"
+      }
+    ],
+    "mechanisms": [
+      "延迟冲动判断",
+      "先定义问题再比较选项"
+    ],
+    "applicable_scenarios": [
+      "决策复盘",
+      "学习规划"
+    ],
+    "boundaries": [
+      "不适合必须秒级反应的应急场景"
+    ],
+    "common_misuses": [
+      "把清晰思考变成无休止分析"
+    ],
+    "related_concepts": [
+      {
+        "name": "批判性思维",
+        "relation": "相关但更偏一般分析框架"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "example_id": "ex_work_decision_01",
+      "title": "工作项目选择案例",
+      "scenario": "用户匆忙决定投入一个项目，但没有先澄清判断标准。",
+      "analysis": "问题不在执行，而在判断前没有定义问题与标准。",
+      "lesson": "先明确标准，再比较方案。",
+      "tags": [
+        "work",
+        "decision"
+      ]
+    }
+  ],
+  "skill_design": {
+    "skill_id": "coach.clear-thinking.decision-review.v1",
+    "skill_folder_name": "coach_clear_thinking_decision_review",
+    "display_name": "Clear Thinking 决策复盘教练",
+    "content_type": "coaching",
+    "one_sentence_description": "帮助用户理解并应用清晰思考进行决策复盘。",
+    "target_user_value": [
+      "理解思想",
+      "迁移应用",
+      "长期改进"
+    ],
+    "trigger_phrases": [
+      "帮我复盘这个决定",
+      "我总是判断失误"
+    ],
+    "tone_style": [
+      "clarifying",
+      "practical"
+    ]
+  },
+  "mode_evaluation": {
+    "supported_modes": [
+      "teach",
+      "coach",
+      "reflect"
+    ],
+    "mode_reasoning": {
+      "teach": "概念框架完整，适合解释。",
+      "coach": "可以迁移到真实决策场景。",
+      "reflect": "适合长期复盘行为变化。",
+      "execute": "不适合，因为缺乏标准化执行步骤。"
+    },
+    "execution_level": "none",
+    "execution_scope": [],
+    "approval_required_actions": []
+  },
+  "memory_design": {
+    "memory_enabled": true,
+    "store": {
+      "teach": [
+        "概念误解",
+        "偏好解释方式"
+      ],
+      "coach": [
+        "目标",
+        "约束",
+        "卡点"
+      ],
+      "reflect": [
+        "成长变化",
+        "重复偏差"
+      ],
+      "execute": []
+    },
+    "avoid": [
+      "密钥",
+      "逐字隐私对话"
+    ],
+    "summary_policy": "session_to_periodic_to_long_term",
+    "progress_dimensions": [
+      "理解深度",
+      "应用频率"
+    ]
+  },
+  "artifact_plan": {
+    "article_package": {
+      "folder": "articles/article_clear-thinking_sample",
+      "files": [
+        "source_meta.json",
+        "distilled.md",
+        "examples.md",
+        "coach_notes.md"
+      ]
+    },
+    "child_skill_package": {
+      "folder": "skills/coach_clear_thinking_decision_review",
+      "files": [
+        "SKILL.md",
+        "README.md",
+        "meta.json",
+        "memory_schema.md"
+      ]
+    },
+    "memory_package": {
+      "folder": "memory/coach.clear-thinking.decision-review.v1",
+      "subfolders": [
+        "shared",
+        "users"
+      ]
+    },
+    "registry_updates": {
+      "append_registry_entry": true,
+      "refresh_summary": true
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "skill_id": "coach.clear-thinking.decision-review.v1",
+  "display_name": "Clear Thinking 决策复盘教练",
+  "source_id": "article_clear-thinking_sample",
+  "content_type": "coaching",
+  "supported_modes": [
+    "teach",
+    "coach",
+    "reflect"
+  ],
+  "execution_level": "none",
+  "status": "draft",
+  "version": "v1",
+  "memory_enabled": true,
+  "exportable": true,
+  "entry_path": "skills/coach_clear_thinking_decision_review/SKILL.md"
+}

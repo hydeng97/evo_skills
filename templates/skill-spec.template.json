@@ -1,0 +1,148 @@
+{
+  "spec_version": "1.0",
+  "source_meta": {
+    "source_id": "{{source_id}}",
+    "source_type": "{{source_type}}",
+    "title": "{{title}}",
+    "author": "{{author}}",
+    "language": "{{language}}",
+    "source_path": "{{source_path}}",
+    "topic_tags": [
+      "{{topic_tag_1}}"
+    ],
+    "rights_note": "{{rights_note}}"
+  },
+  "distillation": {
+    "summary": "{{summary}}",
+    "core_thesis": "{{core_thesis}}",
+    "key_concepts": [
+      {
+        "name": "{{concept_name}}",
+        "definition": "{{concept_definition}}",
+        "importance": "{{concept_importance}}"
+      }
+    ],
+    "mechanisms": [
+      "{{mechanism_1}}"
+    ],
+    "applicable_scenarios": [
+      "{{scenario_1}}"
+    ],
+    "boundaries": [
+      "{{boundary_1}}"
+    ],
+    "common_misuses": [
+      "{{common_misuse_1}}"
+    ],
+    "related_concepts": [
+      {
+        "name": "{{related_concept_name}}",
+        "relation": "{{related_concept_relation}}"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "example_id": "{{example_id}}",
+      "title": "{{example_title}}",
+      "scenario": "{{example_scenario}}",
+      "analysis": "{{example_analysis}}",
+      "lesson": "{{example_lesson}}",
+      "tags": [
+        "{{example_tag_1}}"
+      ]
+    }
+  ],
+  "skill_design": {
+    "skill_id": "{{skill_id}}",
+    "skill_folder_name": "{{skill_folder_name}}",
+    "display_name": "{{display_name}}",
+    "content_type": "{{content_type}}",
+    "one_sentence_description": "{{one_sentence_description}}",
+    "target_user_value": [
+      "{{target_user_value_1}}"
+    ],
+    "trigger_phrases": [
+      "{{trigger_phrase_1}}",
+      "{{trigger_phrase_2}}"
+    ],
+    "tone_style": [
+      "{{tone_style_1}}"
+    ]
+  },
+  "mode_evaluation": {
+    "supported_modes": [
+      "teach",
+      "coach",
+      "reflect"
+    ],
+    "mode_reasoning": {
+      "teach": "{{teach_reasoning}}",
+      "coach": "{{coach_reasoning}}",
+      "reflect": "{{reflect_reasoning}}",
+      "execute": "{{execute_reasoning}}"
+    },
+    "execution_level": "{{execution_level}}",
+    "execution_scope": [
+      "{{execution_scope_1}}"
+    ],
+    "approval_required_actions": [
+      "{{approval_required_action_1}}"
+    ]
+  },
+  "memory_design": {
+    "memory_enabled": true,
+    "store": {
+      "teach": [
+        "{{teach_memory_item_1}}"
+      ],
+      "coach": [
+        "{{coach_memory_item_1}}"
+      ],
+      "reflect": [
+        "{{reflect_memory_item_1}}"
+      ],
+      "execute": [
+        "{{execute_memory_item_1}}"
+      ]
+    },
+    "avoid": [
+      "{{avoid_item_1}}"
+    ],
+    "summary_policy": "{{summary_policy}}",
+    "progress_dimensions": [
+      "{{progress_dimension_1}}"
+    ]
+  },
+  "artifact_plan": {
+    "article_package": {
+      "folder": "articles/{{source_id}}",
+      "files": [
+        "source_meta.json",
+        "distilled.md",
+        "examples.md",
+        "coach_notes.md"
+      ]
+    },
+    "child_skill_package": {
+      "folder": "skills/{{skill_folder_name}}",
+      "files": [
+        "SKILL.md",
+        "README.md",
+        "meta.json",
+        "memory_schema.md"
+      ]
+    },
+    "memory_package": {
+      "folder": "memory/{{skill_id}}",
+      "subfolders": [
+        "shared",
+        "users"
+      ]
+    },
+    "registry_updates": {
+      "append_registry_entry": true,
+      "refresh_summary": true
+    }
+  }
+}

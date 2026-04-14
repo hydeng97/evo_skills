@@ -1,16 +1,9 @@
 # Managed Child Skills Summary
 
-This file is the human-readable overview for all child skills managed by `evo_skills`.
+This file is generated from `skills/registry.json`.
 
-For each child skill, record:
-
-- display name
-- `skill_id`
-- `source_id`
-- content type (`insight`, `coaching`, `tutorial`, or `technical`)
-- supported modes
-- execution level
-- status
-- exportability
+- registry version: 1
+- managed by: evo_skills
+- execution posture: balanced
 
 No child skills have been registered yet.

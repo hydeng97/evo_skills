@@ -1,0 +1,13 @@
+{
+  "source_id": "article_clear-thinking_sample",
+  "source_type": "article",
+  "title": "Clear Thinking Sample",
+  "author": "Example Author",
+  "language": "zh",
+  "source_path": "examples/specs/sample_skill_spec.json",
+  "topic_tags": [
+    "thinking",
+    "decision-making"
+  ],
+  "rights_note": "Sample fixture for local builder verification"
+}

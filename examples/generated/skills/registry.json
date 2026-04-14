@@ -1,0 +1,36 @@
+{
+  "registry_version": 1,
+  "managed_by": "evo_skills",
+  "execution_posture": "balanced",
+  "mode_definitions": {
+    "teach": "Explain key ideas, examples, and misconceptions.",
+    "coach": "Apply source-derived strategies to the user's current scenario.",
+    "reflect": "Summarize long-term changes, blind spots, and growth patterns.",
+    "execute": "Perform concrete steps when a repeatable workflow has been approved for execution."
+  },
+  "execution_levels": {
+    "none": "No execution allowed.",
+    "plan_only": "Plan steps but do not execute them.",
+    "guided_execute": "Execute safe steps while explaining actions and assumptions.",
+    "safe_execute": "Execute low-risk standard actions directly."
+  },
+  "skills": [
+    {
+      "skill_id": "coach.clear-thinking.decision-review.v1",
+      "display_name": "Clear Thinking 决策复盘教练",
+      "source_id": "article_clear-thinking_sample",
+      "content_type": "coaching",
+      "supported_modes": [
+        "teach",
+        "coach",
+        "reflect"
+      ],
+      "execution_level": "none",
+      "status": "draft",
+      "version": "v1",
+      "memory_enabled": true,
+      "exportable": true,
+      "entry_path": "skills/coach_clear_thinking_decision_review/SKILL.md"
+    }
+  ]
+}
