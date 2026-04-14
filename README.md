@@ -1,62 +1,164 @@
 # evo_skills
 
-`evo_skills` is an exposed OpenCode meta skill for turning books, articles, and tutorials into managed child skills.
+`evo_skills` 是一个面向长期演化的元 skill 系统，用于把文章、书籍、教程、技术文档、笔记和转录材料蒸馏成可复用的 child skills，并在后续对话中持续调用、管理和记忆这些技能。
 
-It owns four responsibilities:
+它不是一个单纯的“摘要工具”，而是一个围绕 **知识蒸馏、skill 生成、运行时路由、长期记忆、标签治理** 设计的工作流系统。
 
-1. Normalize source material into reusable distilled article packages.
-2. Generate child skills that can teach, coach, reflect, and optionally execute.
-3. Maintain a registry and summary of all managed child skills.
-4. Store long-term memory in a structured per-skill and per-user layout.
+## 核心定位
 
-This skill is intentionally designed so generated child skills can be exported and installed into other agent systems without depending completely on `evo_skills`.
+`evo_skills` 的目标是解决这样一类问题：
 
-## Runtime layout
+- 如何把大量来源各异的内容沉淀为可重复复用的 agent skill
+- 如何让这些 skill 在后续真实问题中被智能调用，而不是只停留在文档层
+- 如何在长期互动中积累用户背景、偏好、目标和成长变化
+- 如何在 skill 数量越来越多时，仍然保持可管理、可检索、可扩展
 
-- `articles/`: normalized source-material packages
-- `skills/`: generated child skills plus registry files
-- `memory/`: long-term memory grouped by skill and user
-- `scripts/`: automation helpers for ingest, generation, registry, memory, and export flows
-- `templates/`: standard generation templates for child skills
-- `exports/`: standalone child-skill bundles ready for migration
-- `archive/`: retired or superseded skill versions
+## 核心能力
 
-## Current build workflow
+### 1. Source Distillation
 
-The intended workflow is:
+把用户提供的原始材料转换为结构化中间产物，而不是直接把原文压缩成普通摘要。
 
-1. Use the current agent to read source material and distill a `skill_spec.json` that follows `docs/skill_spec_schema.md`.
-2. Review key spec fields with the user before building, especially `display_name`, `skill_id`, `content_type`, `supported_modes`, `execution_level`, and `core_thesis`.
-3. Use `scripts/build/build_child_skill.py` to convert the approved spec into article artifacts, a child skill package, memory scaffolding, and registry updates.
-4. Use the registry tools to validate and refresh summary views as needed.
+系统强调：
 
-## Skill library visibility
+- 材料类型判断
+- source map
+- 四类原子单元提取
+- `skill_spec.json` 生成
+- review gate
 
-`evo_skills` now maintains two human-facing views of the skill library:
+这使得蒸馏过程更可解释、更可审查，也更适合长期维护。
 
-1. `skills/skill_summary.md` — compact registry-oriented summary
-2. `skills/library_overview.md` — user-facing overview with overall stats, tag grouping, and per-skill descriptions
+### 2. Child Skill Generation
 
-Use the registry refresh flow to keep these views synchronized.
+基于 `skill_spec.json` 生成标准化 child skills，包括：
 
-Example build command:
+- `SKILL.md`
+- `README.md`
+- `meta.json`
+- `memory_schema.md`
 
-```bash
-source ~/.zshrc >/dev/null 2>&1
-conda activate agent
-python "scripts/build/build_child_skill.py" --spec "examples/specs/sample_skill_spec.json" --root "examples/generated"
-```
+生成出的 child skill 既能被 `evo_skills` 统一管理，也尽可能保持可移植、可独立导出。
 
-## Agent-only rule
+### 3. Runtime Routing
 
-`evo_skills` does not depend on any separate LLM API for distillation. The current agent session is responsible for understanding source material, proposing the child skill design, and producing the intermediate `skill_spec.json`. Local scripts only perform deterministic filesystem, registry, and summary work.
+当用户在真实对话中提出问题时，`evo_skills` 不会简单遍历 skill 总表，而是通过：
 
-## Core protocol entry points
+- 用户意图判断
+- 动态标签过滤
+- mode 兼容性判断
+- execute 风险判断
+- memory 关联排序
 
-The most important workflow documents for continuing implementation and day-to-day use are:
+来选择最合适的 child skill。
 
-- `docs/interactive_distill_session_protocol.md`
-- `docs/agent_distillation_runtime_protocol.md`
-- `docs/runtime_routing_rule.md`
-- `docs/memory_runtime_rule.md`
-- `docs/dynamic_tagging_rule.md`
+### 4. Long-Term Memory
+
+系统将 memory 视为长期交互中的稳定摘要，而不是原始对话存档。
+
+memory 可用于：
+
+- 更贴合用户背景的解释
+- 更有针对性的教练分析
+- 更连续的长期反思
+- 更一致的执行偏好控制
+
+### 5. Governance and Evolution
+
+`evo_skills` 不只是生成 skill，还负责：
+
+- registry 管理
+- summary / overview 生成
+- 动态标签治理
+- child skill 演化与维护
+
+这让系统可以从少量 skill 平滑扩展到更大的 skill 库，而不会快速失控。
+
+## Child Skill Modes
+
+每个 child skill 可以支持一个或多个运行模式：
+
+- `teach`：讲解关键思想、概念、案例和误区
+- `coach`：结合用户场景做分析、建议和提问引导
+- `reflect`：做复盘、总结成长模式和长期变化
+- `execute`：在流程稳定、边界清晰时执行具体步骤
+
+其中 `execute` 是可选能力，只有在流程明确、结果可验证、风险可控时才会开启。
+
+## Agent-Only Workflow
+
+`evo_skills` 采用 **agent-only** 的蒸馏与构建流程。
+
+这意味着：
+
+- 不依赖外部 LLM API 完成核心蒸馏
+- 由当前 agent 负责阅读、提炼、分类、判定和设计
+- 由本地脚本负责 deterministic 的落地、registry 更新和 overview 刷新
+
+这种设计让系统既保留智能判断能力，又保留工程化的稳定输出。
+
+## Dynamic Tagging System
+
+随着 skill 数量增加，固定分类树会越来越僵化。因此 `evo_skills` 不采用预定义死板分类体系，而采用 **动态标签系统**。
+
+动态标签系统支持：
+
+- 标签新建
+- 标签复用
+- 标签合并
+- 标签拆分
+- 基于标签的渐进式披露
+
+这使得 skill 库可以在不断扩张的同时，仍然保持可路由、可导航、可理解。
+
+## Skill Library Views
+
+系统维护两个不同层级的人类可读视图：
+
+### `skills/skill_summary.md`
+
+偏 registry-oriented 的紧凑摘要，适合快速查看每个 skill 的核心元信息。
+
+### `skills/library_overview.md`
+
+偏用户浏览的总览页，提供：
+
+- 技能库总体统计
+- 标签分组
+- 每个 skill 的名称、标签、模式、状态、功能摘要
+
+这使得用户无需直接面对完整 skill 总表，就能先建立对 skill 库的大致认识。
+
+## 适用场景
+
+`evo_skills` 适合以下场景：
+
+- 从文章或书籍中提炼长期可复用的认知型 skill
+- 从教程或工作流中提炼可执行的操作型 skill
+- 为大型 skill 库提供统一治理、标签、summary 和 overview
+- 让 agent 在长期对话中基于已有技能与记忆持续陪伴用户
+
+## 仓库结构
+
+- `articles/`：蒸馏后的来源材料包
+- `skills/`：child skill、registry、summary、overview
+- `memory/`：长期记忆结构
+- `scripts/`：构建、registry、overview 等自动化脚本
+- `templates/`：skill spec、review gate、source map、trial report 等模板
+- `docs/`：工作流协议、蒸馏规则、运行规则、治理规则
+- `exports/`：导出后的可移植 child skill 包
+- `archive/`：废弃或替换后的 skill 版本
+
+## 当前特点
+
+这个仓库目前已经具备：
+
+- `skill_spec.json` 驱动的 build 流程
+- 动态标签支持
+- registry / summary / overview 生成
+- interactive distill session protocol
+- runtime routing 规则
+- memory runtime 规则
+- post-build trial 规则
+
+换句话说，`evo_skills` 已经不是一个零散脚本集合，而是一个逐步成型的 **元 skill operating system**。
