@@ -14,10 +14,44 @@ description: |
 
 在行动前先澄清问题和偏差来源，可以提高长期决策质量。
 
+## When to use
+
+- 决策复盘
+- 学习规划
+
+## Not a fit when
+
+- 不适合必须秒级反应的应急场景
+
 ## Supported Modes
 
 teach, coach, reflect
 
+## Mode behavior
+
+- `teach`: explain the core concepts, examples, and misconceptions from this source.
+- `coach`: apply the source framework to the user's real scenario and constraints.
+- `reflect`: summarize patterns, changes, and recurring blind spots over time.
+- `execute`: only available if execution is explicitly enabled for this skill.
+
 ## Execution Level
 
 none
+
+## Memory interaction
+
+- `teach` reads: profile
+- `coach` reads: profile, progress
+- `reflect` reads: profile, progress, recent session summaries
+- `execute` reads: profile
+- Write back when: goal changes, stable patterns, progress summaries
+
+## Memory paths
+
+- Shared templates: `memory/coach.clear-thinking.decision-review.v1/shared/`
+- User memories: `memory/coach.clear-thinking.decision-review.v1/users/<user_id>/`
+
+## Memory policy
+
+- Store: 目标, 约束, 卡点
+- Avoid: 密钥, 逐字隐私对话

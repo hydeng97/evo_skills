@@ -10,6 +10,25 @@
   "status": "draft",
   "version": "v1",
   "memory_enabled": true,
+  "memory_runtime": {
+    "enabled": true,
+    "read_by_mode": {
+      "teach": ["profile"],
+      "coach": ["profile", "progress"],
+      "reflect": ["profile", "progress", "sessions"],
+      "execute": ["profile"]
+    },
+    "write_triggers": ["{{write_trigger_1}}"],
+    "write_targets": {
+      "profile": ["{{profile_target_1}}"],
+      "progress": ["{{progress_target_1}}"],
+      "sessions": ["{{sessions_target_1}}"]
+    },
+    "paths": {
+      "shared_dir": "memory/{{skill_id}}/shared",
+      "users_dir": "memory/{{skill_id}}/users"
+    }
+  },
   "exportable": true,
   "entry_path": "skills/{{skill_id}}/SKILL.md"
 }

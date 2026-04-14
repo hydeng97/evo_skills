@@ -124,6 +124,13 @@ Each generated child skill should be portable and contain at least:
 - `memory_schema.md`
 - optional `cases/` and `prompts/`
 
+Memory-capable child skills should additionally include:
+
+- initialized memory scaffold templates under `memory/<skill_id>/shared/`
+- a documented memory interaction section in `SKILL.md`
+- a documented memory usage section in `README.md`
+- lightweight `memory_runtime` metadata describing read-by-mode, write triggers, and memory paths
+
 Generated child skills should work outside `evo_skills` as much as possible. `evo_skills` improves routing, governance, and memory orchestration, but should not make child skills unusable elsewhere.
 
 ## Quick usage

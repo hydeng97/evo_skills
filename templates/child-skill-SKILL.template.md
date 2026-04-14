@@ -22,6 +22,24 @@ description: |
 - `reflect`: {{reflect_mode_behavior}}
 - `execute`: {{execute_mode_behavior_or_not_supported}}
 
+## When to use
+
+- {{use_case_1}}
+- {{use_case_2}}
+
+## Memory interaction
+
+- `teach` reads: {{teach_memory_reads}}
+- `coach` reads: {{coach_memory_reads}}
+- `reflect` reads: {{reflect_memory_reads}}
+- `execute` reads: {{execute_memory_reads}}
+- Write back when: {{memory_write_triggers}}
+
+## Memory paths
+
+- Shared templates: `memory/{{skill_id}}/shared/`
+- User memories: `memory/{{skill_id}}/users/<user_id>/`
+
 ## Execution boundary
 
 - `execution_level`: `{{execution_level}}`

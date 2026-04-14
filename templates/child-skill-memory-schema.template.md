@@ -29,6 +29,24 @@ Store only summarized, durable observations. Never commit raw secrets, access to
 - Record safe defaults and recurring setup assumptions
 - Record successful and failed low-risk workflows in summarized form
 
+## Read by mode
+
+- `teach`: {{teach_read_layers}}
+- `coach`: {{coach_read_layers}}
+- `reflect`: {{reflect_read_layers}}
+- `execute`: {{execute_read_layers}}
+
+## Write triggers
+
+- {{write_trigger_1}}
+- {{write_trigger_2}}
+
+## File mapping
+
+- `profile.md`: {{profile_file_usage}}
+- `progress.md`: {{progress_file_usage}}
+- `sessions/*.md`: {{sessions_file_usage}}
+
 ## Avoid storing
 
 - secrets

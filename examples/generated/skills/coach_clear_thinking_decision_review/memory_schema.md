@@ -26,3 +26,22 @@
 ## Summary Policy
 
 session_to_periodic_to_long_term
+
+## Read by mode
+
+- `teach`: profile
+- `coach`: profile, progress
+- `reflect`: profile, progress, recent session summaries
+- `execute`: profile
+
+## Write triggers
+
+- goal changes
+- stable patterns detected
+- progress summaries available
+
+## File mapping
+
+- `profile.md`: long-term goals, preferences, constraints
+- `progress.md`: stage changes, blockers, effective strategies
+- `sessions/*.md`: short session summaries and next follow-up points

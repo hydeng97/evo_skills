@@ -63,6 +63,20 @@ memory 可用于：
 - 更连续的长期反思
 - 更一致的执行偏好控制
 
+生成出来的 child skill 不应只“知道 memory 存在”，还应明确：
+
+- 各 mode 默认读取哪些 memory 层
+- 哪些交互结果适合写回 memory
+- memory 文件结构如何组织
+- 如何从模板初始化用户级 memory
+
+当前系统的最小 memory runtime 目标是让 child skill 具备：
+
+- user memory 初始化
+- mode-aware memory 读取
+- session 摘要写入
+- 定期压缩到 durable memory
+
 ### 5. Governance and Evolution
 
 `evo_skills` 不只是生成 skill，还负责：
@@ -160,5 +174,6 @@ memory 可用于：
 - runtime routing 规则
 - memory runtime 规则
 - post-build trial 规则
+- memory-aware child skill generation 设计方向
 
 换句话说，`evo_skills` 已经不是一个零散脚本集合，而是一个逐步成型的 **元 skill operating system**。

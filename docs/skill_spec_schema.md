@@ -523,6 +523,13 @@
 }
 ```
 
+在 child skill 生成完成后，建议把 `memory_design` 进一步映射为 child metadata 中的 `memory_runtime`，用于描述：
+
+- 各 mode 默认读取哪些 memory 层
+- 哪些事件触发 memory 写回
+- 哪类信息应写入 `profile`、`progress`、`sessions`
+- memory 根目录与模板文件位置
+
 # 十四、实现建议
 
 在 `evo_skills` 中，推荐遵循以下工作流：

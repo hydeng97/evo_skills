@@ -18,6 +18,51 @@
   "status": "draft",
   "version": "v1",
   "memory_enabled": true,
+  "memory_runtime": {
+    "enabled": true,
+    "read_by_mode": {
+      "teach": [
+        "profile"
+      ],
+      "coach": [
+        "profile",
+        "progress"
+      ],
+      "reflect": [
+        "profile",
+        "progress",
+        "sessions"
+      ],
+      "execute": [
+        "profile"
+      ]
+    },
+    "write_triggers": [
+      "goal_change",
+      "stable_pattern_detected",
+      "progress_summary_available"
+    ],
+    "write_targets": {
+      "profile": [
+        "long_term_goals",
+        "preferences",
+        "constraints"
+      ],
+      "progress": [
+        "stage_changes",
+        "effective_strategies",
+        "recurring_blockers"
+      ],
+      "sessions": [
+        "important_session_summary",
+        "next_follow_up_point"
+      ]
+    },
+    "paths": {
+      "shared_dir": "memory/coach.clear-thinking.decision-review.v1/shared",
+      "users_dir": "memory/coach.clear-thinking.decision-review.v1/users"
+    }
+  },
   "exportable": true,
   "entry_path": "skills/coach_clear_thinking_decision_review/SKILL.md"
 }

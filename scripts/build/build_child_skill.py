@@ -169,9 +169,27 @@ def render_coach_notes_md(spec: dict) -> str:
 def render_skill_md(spec: dict) -> str:
     design = spec["skill_design"]
     modes = spec["mode_evaluation"]
+    memory = spec["memory_design"]
     triggers = design.get("trigger_phrases", [])
     trigger_lines = "\n".join(f'  - "{item}"' for item in triggers)
     supported = ", ".join(modes.get("supported_modes", []))
+    applicable = (
+        "\n".join(
+            f"- {item}" for item in spec["distillation"].get("applicable_scenarios", [])
+        )
+        or "- 暂无"
+    )
+    boundaries = (
+        "\n".join(f"- {item}" for item in spec["distillation"].get("boundaries", []))
+        or "- 暂无"
+    )
+    read_by_mode = {
+        "teach": "profile",
+        "coach": "profile, progress",
+        "reflect": "profile, progress, recent session summaries",
+        "execute": "profile",
+    }
+    write_triggers = "goal changes, stable patterns, progress summaries"
     return f"""---
 name: {design["skill_folder_name"]}
 description: |
@@ -187,19 +205,53 @@ description: |
 
 {spec["distillation"].get("core_thesis", "")}
 
+## When to use
+
+{applicable}
+
+## Not a fit when
+
+{boundaries}
+
 ## Supported Modes
 
 {supported}
 
+## Mode behavior
+
+- `teach`: explain the core concepts, examples, and misconceptions from this source.
+- `coach`: apply the source framework to the user's real scenario and constraints.
+- `reflect`: summarize patterns, changes, and recurring blind spots over time.
+- `execute`: only available if execution is explicitly enabled for this skill.
+
 ## Execution Level
 
 {modes.get("execution_level", "none")}
+
+## Memory interaction
+
+- `teach` reads: {read_by_mode["teach"]}
+- `coach` reads: {read_by_mode["coach"]}
+- `reflect` reads: {read_by_mode["reflect"]}
+- `execute` reads: {read_by_mode["execute"]}
+- Write back when: {write_triggers}
+
+## Memory paths
+
+- Shared templates: `memory/{design["skill_id"]}/shared/`
+- User memories: `memory/{design["skill_id"]}/users/<user_id>/`
+
+## Memory policy
+
+- Store: {", ".join(memory.get("store", {}).get("coach", [])) or "see memory_schema.md"}
+- Avoid: {", ".join(memory.get("avoid", [])) or "none"}
 """
 
 
 def render_skill_readme(spec: dict) -> str:
     design = spec["skill_design"]
     tags = ", ".join(design.get("tags", [])) or "暂无"
+    supported = ", ".join(spec["mode_evaluation"].get("supported_modes", [])) or "暂无"
     return f"""# {design["display_name"]}
 
 {design["one_sentence_description"]}
@@ -208,15 +260,42 @@ def render_skill_readme(spec: dict) -> str:
 
 {tags}
 
+## Supported Modes
+
+{supported}
+
 ## Target User Value
 
 {chr(10).join(f"- {item}" for item in design.get("target_user_value", [])) or "- 暂无"}
+
+## Memory Usage
+
+This skill is generated as memory-aware.
+
+- Shared templates live under `memory/{design["skill_id"]}/shared/`
+- User-specific memories live under `memory/{design["skill_id"]}/users/<user_id>/`
+- `profile.md` is for durable goals, preferences, and constraints
+- `progress.md` is for stage changes, blockers, and effective strategies
+- `sessions/` is for short session summaries before later compression
+
+## Runtime Notes
+
+- `teach` is best for explanation and concept clarification.
+- `coach` is best for applying the framework to a real situation.
+- `reflect` is best for long-term review with memory context.
+- Check `memory_schema.md` and `meta.json` for the exact memory contract.
 """
 
 
 def render_memory_schema(spec: dict) -> str:
     memory = spec["memory_design"]
     store = memory.get("store", {})
+    read_by_mode = {
+        "teach": "profile",
+        "coach": "profile, progress",
+        "reflect": "profile, progress, recent session summaries",
+        "execute": "profile",
+    }
     return f"""# Memory Schema
 
 ## Store
@@ -240,7 +319,164 @@ def render_memory_schema(spec: dict) -> str:
 ## Summary Policy
 
 {memory.get("summary_policy", "")}
+
+## Read by mode
+
+- `teach`: {read_by_mode["teach"]}
+- `coach`: {read_by_mode["coach"]}
+- `reflect`: {read_by_mode["reflect"]}
+- `execute`: {read_by_mode["execute"]}
+
+## Write triggers
+
+- goal changes
+- stable patterns detected
+- progress summaries available
+
+## File mapping
+
+- `profile.md`: long-term goals, preferences, constraints
+- `progress.md`: stage changes, blockers, effective strategies
+- `sessions/*.md`: short session summaries and next follow-up points
 """
+
+
+def build_memory_runtime(spec: dict) -> dict:
+    skill_id = spec["skill_design"]["skill_id"]
+    return {
+        "enabled": bool(spec["memory_design"].get("memory_enabled", True)),
+        "read_by_mode": {
+            "teach": ["profile"],
+            "coach": ["profile", "progress"],
+            "reflect": ["profile", "progress", "sessions"],
+            "execute": ["profile"],
+        },
+        "write_triggers": [
+            "goal_change",
+            "stable_pattern_detected",
+            "progress_summary_available",
+        ],
+        "write_targets": {
+            "profile": ["long_term_goals", "preferences", "constraints"],
+            "progress": ["stage_changes", "effective_strategies", "recurring_blockers"],
+            "sessions": ["important_session_summary", "next_follow_up_point"],
+        },
+        "paths": {
+            "shared_dir": f"memory/{skill_id}/shared",
+            "users_dir": f"memory/{skill_id}/users",
+        },
+    }
+
+
+def write_memory_templates(memory_dir: Path) -> list[Path]:
+    created: list[Path] = []
+    shared_dir = memory_dir / "shared"
+    users_dir = memory_dir / "users"
+    shared_dir.mkdir(parents=True, exist_ok=True)
+    users_dir.mkdir(parents=True, exist_ok=True)
+
+    shared_readme = shared_dir / "README.md"
+    write_text(
+        shared_readme,
+        """# Shared Memory Templates
+
+This directory stores reusable memory templates for this child skill.
+
+- `profile.template.md`: initialize long-term user profile records
+- `progress.template.md`: initialize stage and growth summaries
+- `session.template.md`: initialize short session summaries before compression
+""",
+    )
+    created.append(shared_readme)
+
+    profile_template = shared_dir / "profile.template.md"
+    write_text(
+        profile_template,
+        """# Profile Template
+
+## Long-Term Goals
+
+- 
+
+## Preferences
+
+- 
+
+## Constraints
+
+- 
+""",
+    )
+    created.append(profile_template)
+
+    progress_template = shared_dir / "progress.template.md"
+    write_text(
+        progress_template,
+        """# Progress Template
+
+## Current Stage
+
+- 
+
+## Observed Changes
+
+- 
+
+## Effective Strategies
+
+- 
+
+## Recurring Blockers
+
+- 
+""",
+    )
+    created.append(progress_template)
+
+    session_template = shared_dir / "session.template.md"
+    write_text(
+        session_template,
+        """# Session Template
+
+## Date
+
+- 
+
+## Core Question
+
+- 
+
+## New Insight
+
+- 
+
+## Follow-up
+
+- 
+""",
+    )
+    created.append(session_template)
+
+    users_readme = users_dir / "README.md"
+    write_text(
+        users_readme,
+        """# Users Directory
+
+Create one directory per user:
+
+```text
+users/<user_id>/
+  profile.md
+  progress.md
+  sessions/
+```
+
+Initialize `profile.md` and `progress.md` from the shared templates when starting a long-term interaction.
+""",
+    )
+    created.append(users_readme)
+
+    return created
 
 
 def default_registry() -> dict:
@@ -340,6 +576,7 @@ def build(spec: dict, root: Path) -> list[Path]:
         "status": "draft",
         "version": "v1",
         "memory_enabled": memory["memory_enabled"],
+        "memory_runtime": build_memory_runtime(spec),
         "exportable": True,
         "entry_path": f"skills/{design['skill_folder_name']}/SKILL.md",
     }
@@ -356,16 +593,7 @@ def build(spec: dict, root: Path) -> list[Path]:
         ]
     )
 
-    (memory_dir / "shared").mkdir(parents=True, exist_ok=True)
-    (memory_dir / "users").mkdir(parents=True, exist_ok=True)
-    write_text(memory_dir / "shared" / ".gitkeep", "")
-    write_text(memory_dir / "users" / ".gitkeep", "")
-    created.extend(
-        [
-            memory_dir / "shared" / ".gitkeep",
-            memory_dir / "users" / ".gitkeep",
-        ]
-    )
+    created.extend(write_memory_templates(memory_dir))
 
     if registry_path.exists():
         registry = json.loads(registry_path.read_text(encoding="utf-8"))
@@ -384,6 +612,7 @@ def build(spec: dict, root: Path) -> list[Path]:
         "status": "draft",
         "version": "v1",
         "memory_enabled": memory["memory_enabled"],
+        "memory_runtime": build_memory_runtime(spec),
         "exportable": True,
         "entry_path": f"skills/{design['skill_folder_name']}/SKILL.md",
     }
