@@ -40,6 +40,19 @@ description: |
 - Shared templates: `memory/{{skill_id}}/shared/`
 - User memories: `memory/{{skill_id}}/users/<user_id>/`
 
+## Article interaction
+
+- `teach` reads: {{teach_article_reads}}
+- `coach` reads: {{coach_article_reads}}
+- `reflect` reads: {{reflect_article_reads}}
+- `execute` reads: {{execute_article_reads}}
+
+## Article paths
+
+- Distilled content: `articles/{{source_id}}/distilled.md`
+- Examples: `articles/{{source_id}}/examples.md`
+- Coach notes: `articles/{{source_id}}/coach_notes.md`
+
 ## Execution boundary
 
 - `execution_level`: `{{execution_level}}`

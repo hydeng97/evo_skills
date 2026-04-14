@@ -26,6 +26,20 @@ This skill is generated as memory-aware.
 - `progress.md` is for stage changes, blockers, and effective strategies
 - `sessions/` is for short session summaries before later compression
 
+## Article Package Usage
+
+This skill also depends on the distilled article package as its knowledge source.
+
+- Distilled content: `articles/article_clear-thinking_sample/distilled.md`
+- Examples: `articles/article_clear-thinking_sample/examples.md`
+- Coach notes: `articles/article_clear-thinking_sample/coach_notes.md`
+
+Typical runtime pattern:
+
+- `teach` reads distilled content and examples
+- `coach` reads distilled content, coach notes, and examples
+- `reflect` reads distilled content and coach notes
+
 ## Runtime Notes
 
 - `teach` is best for explanation and concept clarification.

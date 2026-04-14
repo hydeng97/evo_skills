@@ -29,6 +29,26 @@
       "users_dir": "memory/{{skill_id}}/users"
     }
   },
+  "article_runtime": {
+    "paths": {
+      "source_meta_json": "articles/{{source_id}}/source_meta.json",
+      "distilled_md": "articles/{{source_id}}/distilled.md",
+      "examples_md": "articles/{{source_id}}/examples.md",
+      "coach_notes_md": "articles/{{source_id}}/coach_notes.md"
+    },
+    "read_by_mode": {
+      "teach": ["distilled_md", "examples_md"],
+      "coach": ["distilled_md", "coach_notes_md", "examples_md"],
+      "reflect": ["distilled_md", "coach_notes_md"],
+      "execute": []
+    },
+    "required_by_mode": {
+      "teach": ["distilled_md"],
+      "coach": ["distilled_md", "coach_notes_md"],
+      "reflect": ["distilled_md"],
+      "execute": []
+    }
+  },
   "exportable": true,
   "entry_path": "skills/{{skill_id}}/SKILL.md"
 }

@@ -131,6 +131,12 @@ Memory-capable child skills should additionally include:
 - a documented memory usage section in `README.md`
 - lightweight `memory_runtime` metadata describing read-by-mode, write triggers, and memory paths
 
+Article-runtime-aware child skills should additionally include:
+
+- documented article interaction rules in `SKILL.md`
+- documented article package usage in `README.md`
+- lightweight `article_runtime` metadata describing source file paths, read-by-mode, and required-by-mode rules
+
 Generated child skills should work outside `evo_skills` as much as possible. `evo_skills` improves routing, governance, and memory orchestration, but should not make child skills unusable elsewhere.
 
 ## Quick usage

@@ -189,6 +189,12 @@ def render_skill_md(spec: dict) -> str:
         "reflect": "profile, progress, recent session summaries",
         "execute": "profile",
     }
+    article_reads = {
+        "teach": "distilled.md, examples.md",
+        "coach": "distilled.md, coach_notes.md, examples.md",
+        "reflect": "distilled.md, coach_notes.md",
+        "execute": "none by default",
+    }
     write_triggers = "goal changes, stable patterns, progress summaries"
     return f"""---
 name: {design["skill_folder_name"]}
@@ -241,6 +247,19 @@ description: |
 - Shared templates: `memory/{design["skill_id"]}/shared/`
 - User memories: `memory/{design["skill_id"]}/users/<user_id>/`
 
+## Article interaction
+
+- `teach` reads: {article_reads["teach"]}
+- `coach` reads: {article_reads["coach"]}
+- `reflect` reads: {article_reads["reflect"]}
+- `execute` reads: {article_reads["execute"]}
+
+## Article paths
+
+- Distilled content: `articles/{spec["source_meta"]["source_id"]}/distilled.md`
+- Examples: `articles/{spec["source_meta"]["source_id"]}/examples.md`
+- Coach notes: `articles/{spec["source_meta"]["source_id"]}/coach_notes.md`
+
 ## Memory policy
 
 - Store: {", ".join(memory.get("store", {}).get("coach", [])) or "see memory_schema.md"}
@@ -252,6 +271,7 @@ def render_skill_readme(spec: dict) -> str:
     design = spec["skill_design"]
     tags = ", ".join(design.get("tags", [])) or "暂无"
     supported = ", ".join(spec["mode_evaluation"].get("supported_modes", [])) or "暂无"
+    source_id = spec["source_meta"]["source_id"]
     return f"""# {design["display_name"]}
 
 {design["one_sentence_description"]}
@@ -277,6 +297,20 @@ This skill is generated as memory-aware.
 - `profile.md` is for durable goals, preferences, and constraints
 - `progress.md` is for stage changes, blockers, and effective strategies
 - `sessions/` is for short session summaries before later compression
+
+## Article Package Usage
+
+This skill also depends on the distilled article package as its knowledge source.
+
+- Distilled content: `articles/{source_id}/distilled.md`
+- Examples: `articles/{source_id}/examples.md`
+- Coach notes: `articles/{source_id}/coach_notes.md`
+
+Typical runtime pattern:
+
+- `teach` reads distilled content and examples
+- `coach` reads distilled content, coach notes, and examples
+- `reflect` reads distilled content and coach notes
 
 ## Runtime Notes
 
@@ -364,6 +398,30 @@ def build_memory_runtime(spec: dict) -> dict:
         "paths": {
             "shared_dir": f"memory/{skill_id}/shared",
             "users_dir": f"memory/{skill_id}/users",
+        },
+    }
+
+
+def build_article_runtime(spec: dict) -> dict:
+    source_id = spec["source_meta"]["source_id"]
+    return {
+        "paths": {
+            "source_meta_json": f"articles/{source_id}/source_meta.json",
+            "distilled_md": f"articles/{source_id}/distilled.md",
+            "examples_md": f"articles/{source_id}/examples.md",
+            "coach_notes_md": f"articles/{source_id}/coach_notes.md",
+        },
+        "read_by_mode": {
+            "teach": ["distilled_md", "examples_md"],
+            "coach": ["distilled_md", "coach_notes_md", "examples_md"],
+            "reflect": ["distilled_md", "coach_notes_md"],
+            "execute": [],
+        },
+        "required_by_mode": {
+            "teach": ["distilled_md"],
+            "coach": ["distilled_md", "coach_notes_md"],
+            "reflect": ["distilled_md"],
+            "execute": [],
         },
     }
 
@@ -577,6 +635,7 @@ def build(spec: dict, root: Path) -> list[Path]:
         "version": "v1",
         "memory_enabled": memory["memory_enabled"],
         "memory_runtime": build_memory_runtime(spec),
+        "article_runtime": build_article_runtime(spec),
         "exportable": True,
         "entry_path": f"skills/{design['skill_folder_name']}/SKILL.md",
     }
@@ -613,6 +672,7 @@ def build(spec: dict, root: Path) -> list[Path]:
         "version": "v1",
         "memory_enabled": memory["memory_enabled"],
         "memory_runtime": build_memory_runtime(spec),
+        "article_runtime": build_article_runtime(spec),
         "exportable": True,
         "entry_path": f"skills/{design['skill_folder_name']}/SKILL.md",
     }

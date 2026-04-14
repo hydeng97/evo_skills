@@ -40,6 +40,14 @@
 
 生成出的 child skill 既能被 `evo_skills` 统一管理，也尽可能保持可移植、可独立导出。
 
+生成出来的 child skill 不应只“知道自己的核心主张”，还应明确：
+
+- 它依赖哪些 article package 文件
+- 各 mode 默认读取哪些 article 资源
+- 哪些 article 文件是 required，哪些是 optional
+
+这使得 child skill 在运行时既有用户长期 memory，也有稳定的知识来源文件契约。
+
 ### 3. Runtime Routing
 
 当用户在真实对话中提出问题时，`evo_skills` 不会简单遍历 skill 总表，而是通过：

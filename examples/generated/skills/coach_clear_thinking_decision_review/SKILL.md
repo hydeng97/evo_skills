@@ -51,6 +51,19 @@ none
 - Shared templates: `memory/coach.clear-thinking.decision-review.v1/shared/`
 - User memories: `memory/coach.clear-thinking.decision-review.v1/users/<user_id>/`
 
+## Article interaction
+
+- `teach` reads: distilled.md, examples.md
+- `coach` reads: distilled.md, coach_notes.md, examples.md
+- `reflect` reads: distilled.md, coach_notes.md
+- `execute` reads: none by default
+
+## Article paths
+
+- Distilled content: `articles/article_clear-thinking_sample/distilled.md`
+- Examples: `articles/article_clear-thinking_sample/examples.md`
+- Coach notes: `articles/article_clear-thinking_sample/coach_notes.md`
+
 ## Memory policy
 
 - Store: 目标, 约束, 卡点

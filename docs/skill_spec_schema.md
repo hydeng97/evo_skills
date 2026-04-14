@@ -530,6 +530,12 @@
 - 哪类信息应写入 `profile`、`progress`、`sessions`
 - memory 根目录与模板文件位置
 
+同时，建议把 article package 的访问规则进一步映射为 child metadata 中的 `article_runtime`，用于描述：
+
+- source article package 文件的具体路径
+- 各 mode 默认读取哪些 article 资源
+- 哪些 article 资源是 required，哪些是 optional
+
 # 十四、实现建议
 
 在 `evo_skills` 中，推荐遵循以下工作流：
